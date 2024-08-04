@@ -1,21 +1,51 @@
 from fuzzy_extractor import FuzzyExtractor
+import random, string
 
 INPUT_LENGTH = 16 # bytes of input accepted
-EPSILON = 4 # bits of similarity
-extractor = FuzzyExtractor(INPUT_LENGTH, EPSILON)
+EPSILON = 8 # bits of similarity
+ext = FuzzyExtractor(INPUT_LENGTH, EPSILON)
 
-test_string = "SPACEY_WAS_HERE1"
-print(len(test_string),":",test_string)
+# initial sets
+S_A = ["ABCDABCDABCDABCD", "EFGHEFGHEFGHEFGH", "IJKLIJKLIJKLIJKL", "MNOPMNOPMNOPMNOP", "QRSTQRSTQRSTQRST", "UVWXUVWXUVWXUVWX", "Y_Z_Y_Z_Y_Z_Y_Z_"]
 
-key, helper = extractor.generate(test_string)
+S_B = ["1234123412341234", "AAAAAAAAAAAAAAAA", "ABCFABCDABCDABCF", "MPONMPONMPONMPON", "XXXXXXXXXXXXXXXX", "MNOPMNOPMNOPMPON"]
 
-attempts = ["SPACEY_WAS_HERE1", "SPACEY_WAS_HERE2", "AABBCCDDEEFFGGHH", "SPACEY_WAS_SLEEP"]
+# |S_A| = n and |S_B| = m
 
-for at in attempts:
-    r = extractor.reproduce(at, helper)
-    if r == key:
-        print("Similar:", at)
-    else:
-        print("Not Similar:", at)
-        # if it is not similar, at least according to this implementation
-        # the reproduced key is None
+# finding the helpers and the keys for S_A
+keys = []
+helpers = []
+
+for a in S_A:
+    k, h = ext.generate(a)
+    keys.append(k)
+    helpers.append(h)
+    # also pretend we're creating S_A^k here which is hash(a)^k
+
+# this is O(n * c) where c is the complexity of generate
+
+# at this point A sends the helpers to B along with S_A^k
+# helpers, S_A^k -> B
+
+recov = [[None for _ in range(len(S_B))] for _ in range(len(helpers))]
+
+for i in range(len(S_B)):
+    for j in range(len(helpers)):
+        recov[j][i] = ext.reproduce(S_B[i], helpers[j])
+
+# this is O(nm * c') where c' is the complexity of reproduce
+
+# after making the recovery matrix, B sends it back to A
+
+candis = []
+
+for i in range(len(recov)):
+    for j in range(len(recov[i])):
+        for k in range(len(keys)):
+            if keys[k] == recov[i][j]:
+                if S_A[k] not in candis:
+                    candis.append(S_A[k])
+
+# this is O(n^2m)
+
+print(candis)
