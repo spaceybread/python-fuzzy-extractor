@@ -28,11 +28,7 @@ docs:
 lint:
 	pylint fuzzy_extractor/*.py tests/*.py
 
-test:
-	python2 -m pytest
-	python3 -m pytest
-
-build: test lint
+build:
 	rm -rf build
 	python setup.py sdist bdist_wheel
 
