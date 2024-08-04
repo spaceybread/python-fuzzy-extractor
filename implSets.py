@@ -48,4 +48,6 @@ for i in range(len(recov)):
 
 # this is O(n^2m)
 
+print(S_A)
+print(S_B)
 print(candis)
