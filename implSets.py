@@ -34,8 +34,9 @@ for i in range(len(S_B)):
         recov[j][i] = ext.reproduce(S_B[i], helpers[j])
 
 # this is O(nm * c') where c' is the complexity of reproduce
+# B also take S_A^k and converts it to S_A^(rk)
 
-# after making the recovery matrix, B sends it back to A
+# after making the recovery matrix, B sends it and S_A^(rk) back to A
 
 candis = []
 
