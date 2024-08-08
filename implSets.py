@@ -2,7 +2,7 @@ from fuzzy_extractor import FuzzyExtractor
 import random, string
 
 INPUT_LENGTH = 16 # bytes of input accepted
-EPSILON = 8 # bits of similarity
+EPSILON = 4 # bits of similarity
 ext = FuzzyExtractor(INPUT_LENGTH, EPSILON)
 
 # initial sets
@@ -50,9 +50,10 @@ def run(S_A, S_B):
 
     # this is O(n^2m)
 
-    print(S_A)
-    print(S_B)
+    #print(S_A)
+    #print(S_B)
     print(candis)
     
 
 run(A, B)
+run(B, A)
