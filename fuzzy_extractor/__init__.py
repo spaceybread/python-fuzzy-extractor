@@ -38,7 +38,7 @@ import numpy as np
 class FuzzyExtractor(object):
     """The most basic non-interactive fuzzy extractor"""
 
-    def __init__(self, length, ham_err, rep_err=0.001, **locker_args):
+    def __init__(self, length, ham_err, rep_err=0.0001, **locker_args):
         """Initializes a fuzzy extractor
 
         :param length: The length in bytes of source values and keys.
